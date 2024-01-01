@@ -8,7 +8,7 @@ use crate::{
 pub struct Board<R: Renderer> {
     pub map: HashMap<[i32; 2], Vec<usize>>,
     is_state: IsState,
-    renderer: R,
+    pub renderer: R,
 }
 
 impl<R: Renderer> Board<R> {
@@ -95,7 +95,7 @@ impl<R: Renderer> Board<R> {
         }
     }
 
-    pub fn player_input(&mut self, input: Direction) {
+    pub fn react_with_input(&mut self, input: Direction) {
         // clones here because entities of map changes while iteration
         for (ij, xs) in self.map.clone().into_iter() {
             for x in xs {
