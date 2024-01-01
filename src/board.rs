@@ -17,13 +17,17 @@ impl Board {
         let next_move_entities = self.map.get(&next_move).cloned();
         if let Some(next_move_entities) = next_move_entities {
             for y in next_move_entities {
-                if IS_WIN[y] {
+                if IS_WIN[y] && IS_YOU[entity] {
                     println!("You win!");
                     std::process::exit(0);
                 }
-                if IS_DEFEAT[y] {
+                if IS_DEFEAT[y] && IS_YOU[entity] {
                     println!("You lose!");
                     std::process::exit(0);
+                }
+                if IS_DEFEAT[y] && !IS_YOU[y] {
+                    self.map.get_mut(&next_move).unwrap().retain(|&x| x != y);
+                    return true;
                 }
                 if IS_STOP[y] {
                     return false;
