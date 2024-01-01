@@ -32,6 +32,7 @@ pub trait Block: Entity {
 
 macro_rules! entity {
     ($name:ident, $index_name:ident) => {
+        #[derive(Debug)]
         pub struct $name {
             _x: i32,
             _y: i32,
