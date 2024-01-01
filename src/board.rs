@@ -1,19 +1,22 @@
 use std::collections::HashMap;
 
-use crate::global::{
-    is_object, is_subject, is_verb, Direction, IsState, DEFEAT, PUSH, STOP, WIN, YOU,
+use crate::{
+    global::{is_object, is_subject, is_verb, Direction, IsState, DEFEAT, PUSH, STOP, WIN, YOU},
+    renderer::Renderer,
 };
 
-pub struct Board {
+pub struct Board<R: Renderer> {
     map: HashMap<[i32; 2], Vec<usize>>,
     is_state: IsState,
+    renderer: R,
 }
 
-impl Board {
-    pub fn new(map: HashMap<[i32; 2], Vec<usize>>) -> Self {
+impl<R: Renderer> Board<R> {
+    pub fn new(map: HashMap<[i32; 2], Vec<usize>>, renderer: R) -> Self {
         Self {
             map,
             is_state: IsState::default(),
+            renderer,
         }
     }
 
@@ -24,11 +27,11 @@ impl Board {
         if let Some(next_move_entities) = next_move_entities {
             for y in next_move_entities {
                 if self.is_state.is_win[y] && self.is_state.is_you[entity] {
-                    println!("You win!");
+                    self.renderer.render_win(self);
                     std::process::exit(0);
                 }
                 if self.is_state.is_defeat[y] && self.is_state.is_you[entity] {
-                    println!("You lose!");
+                    self.renderer.render_defeat(self);
                     std::process::exit(0);
                 }
                 if self.is_state.is_defeat[y] && !self.is_state.is_you[entity] {
@@ -108,5 +111,6 @@ impl Board {
             }
         }
         self.is_state = is_state;
+        self.renderer.render(self);
     }
 }
