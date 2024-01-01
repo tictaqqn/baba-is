@@ -19,3 +19,28 @@ pub enum Direction {
     Left,
     Right,
 }
+
+impl Direction {
+    pub fn next(self, xy: [i32; 2]) -> [i32; 2] {
+        let [x, y] = xy;
+        match self {
+            Direction::Up => [x - 1, y],
+            Direction::Down => [x + 1, y],
+            Direction::Left => [x, y - 1],
+            Direction::Right => [x, y + 1],
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::global::Direction;
+
+    #[test]
+    fn test_direction() {
+        assert_eq!(Direction::Up.next([0, 0]), [-1, 0]);
+        assert_eq!(Direction::Down.next([0, 0]), [1, 0]);
+        assert_eq!(Direction::Left.next([0, 0]), [0, -1]);
+        assert_eq!(Direction::Right.next([0, 0]), [0, 1]);
+    }
+}
