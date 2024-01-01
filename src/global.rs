@@ -6,6 +6,14 @@ pub const WATER: usize = 4;
 pub const LAVA: usize = 5;
 pub const SKULL: usize = 6;
 
+pub const IS: usize = 100;
+
+pub const YOU: usize = 200;
+pub const PUSH: usize = 201;
+pub const STOP: usize = 202;
+pub const WIN: usize = 203;
+pub const DEFEAT: usize = 204;
+
 pub static IS_YOU: [bool; 8] = [false, false, false, false, false, false, false, false];
 pub static IS_PUSH: [bool; 8] = [false, false, false, false, false, false, false, false];
 pub static IS_STOP: [bool; 8] = [false, false, false, false, false, false, false, false];
