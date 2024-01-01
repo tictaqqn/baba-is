@@ -6,7 +6,7 @@ use crate::{
 };
 
 pub struct Board<R: Renderer> {
-    map: HashMap<[i32; 2], Vec<usize>>,
+    pub map: HashMap<[i32; 2], Vec<usize>>,
     is_state: IsState,
     renderer: R,
 }
