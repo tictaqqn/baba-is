@@ -8,6 +8,18 @@ pub trait Entity {
     fn is_stop(&self) -> bool;
     fn is_win(&self) -> bool;
     fn is_defeat(&self) -> bool;
+    fn go_right(&mut self);
+    fn go_left(&mut self);
+    fn go_up(&mut self);
+    fn go_down(&mut self);
+    fn player_input(&mut self, direction: Direction) {
+        match direction {
+            Direction::Up => self.go_up(),
+            Direction::Down => self.go_down(),
+            Direction::Left => self.go_left(),
+            Direction::Right => self.go_right(),
+        }
+    }
 }
 
 pub trait Block: Entity {
@@ -44,6 +56,18 @@ macro_rules! entity {
             }
             fn y(&self) -> i32 {
                 self._y
+            }
+            fn go_right(&mut self) {
+                self._x += 1;
+            }
+            fn go_left(&mut self) {
+                self._x -= 1;
+            }
+            fn go_up(&mut self) {
+                self._y -= 1;
+            }
+            fn go_down(&mut self) {
+                self._y += 1;
             }
             fn is_you(&self) -> bool {
                 IS_YOU[$index_name]
