@@ -14,11 +14,55 @@ pub const STOP: usize = 202;
 pub const WIN: usize = 203;
 pub const DEFEAT: usize = 204;
 
-pub static IS_YOU: [bool; 8] = [false, false, false, false, false, false, false, false];
-pub static IS_PUSH: [bool; 8] = [false, false, false, false, false, false, false, false];
-pub static IS_STOP: [bool; 8] = [false, false, false, false, false, false, false, false];
-pub static IS_WIN: [bool; 8] = [false, false, false, false, false, false, false, false];
-pub static IS_DEFEAT: [bool; 8] = [false, false, false, false, false, false, false, false];
+pub const BABA_B: usize = 300;
+pub const FLAG_B: usize = 301;
+pub const WALL_B: usize = 302;
+pub const ROCK_B: usize = 303;
+pub const WATER_B: usize = 304;
+pub const LAVA_B: usize = 305;
+pub const SKULL_B: usize = 306;
+
+#[inline]
+pub fn is_subject(entity: usize) -> bool {
+    entity >= 300
+}
+
+#[inline]
+pub fn is_verb(entity: usize) -> bool {
+    (100..200).contains(&entity)
+}
+
+#[inline]
+pub fn is_object(entity: usize) -> bool {
+    (200..300).contains(&entity)
+}
+
+pub struct IsState {
+    pub is_you: [bool; 308],
+    pub is_push: [bool; 308],
+    pub is_stop: [bool; 308],
+    pub is_win: [bool; 308],
+    pub is_defeat: [bool; 308],
+}
+
+impl Default for IsState {
+    fn default() -> Self {
+        fn create_array() -> [bool; 308] {
+            let mut array = [true; 308];
+            (0..100).for_each(|i| {
+                array[i] = false;
+            });
+            array
+        }
+        Self {
+            is_you: create_array(),
+            is_push: create_array(),
+            is_stop: create_array(),
+            is_win: create_array(),
+            is_defeat: create_array(),
+        }
+    }
+}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Direction {
