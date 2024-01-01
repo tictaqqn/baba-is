@@ -86,6 +86,8 @@ impl<R: Renderer> Board<R> {
                                     is_state.is_win[x] = true;
                                 } else if z == DEFEAT {
                                     is_state.is_defeat[x] = true;
+                                } else {
+                                    unreachable!("Unknown object: {}", z);
                                 }
                             }
                         }
