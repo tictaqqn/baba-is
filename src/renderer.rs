@@ -1,7 +1,4 @@
-use crate::{
-    board::Board,
-    global::{DEFEAT, PUSH, STOP, WIN, YOU},
-};
+use crate::board::Board;
 
 pub trait Renderer {
     fn render<T: Renderer>(&self, board: &Board<T>);
@@ -24,18 +21,30 @@ impl Renderer for CuiRenderer {
                 let entities = board.map.get(&[i, j]);
                 if let Some(entities) = entities {
                     for &entity in entities {
-                        if entity == YOU {
-                            print!("Y");
-                        } else if entity == WIN {
-                            print!("W");
-                        } else if entity == DEFEAT {
-                            print!("D");
-                        } else if entity == STOP {
-                            print!("S");
-                        } else if entity == PUSH {
-                            print!("P");
-                        } else {
-                            print!("?");
+                        use crate::global::Entity::*;
+                        match entity {
+                            Baba => print!("B"),
+                            Flag => print!("F"),
+                            Wall => print!("W"),
+                            Rock => print!("R"),
+                            Water => print!("w"),
+                            Lava => print!("L"),
+                            Skull => print!("S"),
+
+                            Is => print!("i"),
+                            You => print!("y"),
+                            Win => print!("w"),
+                            Defeat => print!("d"),
+                            Stop => print!("s"),
+                            Push => print!("p"),
+
+                            BabaB => print!("b"),
+                            FlagB => print!("f"),
+                            WallB => print!("w"),
+                            RockB => print!("r"),
+                            WaterB => print!("w"),
+                            LavaB => print!("l"),
+                            SkullB => print!("s"),
                         }
                     }
                 } else {

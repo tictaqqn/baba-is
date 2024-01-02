@@ -1,55 +1,61 @@
-pub const BABA: usize = 0;
-pub const FLAG: usize = 1;
-pub const WALL: usize = 2;
-pub const ROCK: usize = 3;
-pub const WATER: usize = 4;
-pub const LAVA: usize = 5;
-pub const SKULL: usize = 6;
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[repr(usize)]
+pub enum Entity {
+    Baba,
+    Flag,
+    Wall,
+    Rock,
+    Water,
+    Lava,
+    Skull,
 
-pub const IS: usize = 100;
+    Is,
 
-pub const YOU: usize = 200;
-pub const PUSH: usize = 201;
-pub const STOP: usize = 202;
-pub const WIN: usize = 203;
-pub const DEFEAT: usize = 204;
+    You,
+    Push,
+    Stop,
+    Win,
+    Defeat,
 
-pub const BABA_B: usize = 300;
-pub const FLAG_B: usize = 301;
-pub const WALL_B: usize = 302;
-pub const ROCK_B: usize = 303;
-pub const WATER_B: usize = 304;
-pub const LAVA_B: usize = 305;
-pub const SKULL_B: usize = 306;
+    BabaB,
+    FlagB,
+    WallB,
+    RockB,
+    WaterB,
+    LavaB,
+    SkullB,
+}
+
+const ENTITY_COUNT: usize = 30;
 
 #[inline]
-pub fn is_subject(entity: usize) -> bool {
-    entity >= 300
+pub fn is_subject(entity: Entity) -> bool {
+    entity as usize >= Entity::BabaB as usize
 }
 
 #[inline]
-pub fn is_verb(entity: usize) -> bool {
-    (100..200).contains(&entity)
+pub fn is_verb(entity: Entity) -> bool {
+    (Entity::Is as usize..Entity::You as usize).contains(&(entity as usize))
 }
 
 #[inline]
-pub fn is_object(entity: usize) -> bool {
-    (200..300).contains(&entity)
+pub fn is_object(entity: Entity) -> bool {
+    (Entity::You as usize..Entity::BabaB as usize).contains(&(entity as usize))
 }
 
 pub struct IsState {
-    pub is_you: [bool; 308],
-    pub is_push: [bool; 308],
-    pub is_stop: [bool; 308],
-    pub is_win: [bool; 308],
-    pub is_defeat: [bool; 308],
+    pub is_you: [bool; ENTITY_COUNT],
+    pub is_push: [bool; ENTITY_COUNT],
+    pub is_stop: [bool; ENTITY_COUNT],
+    pub is_win: [bool; ENTITY_COUNT],
+    pub is_defeat: [bool; ENTITY_COUNT],
 }
 
 impl Default for IsState {
     fn default() -> Self {
-        fn create_array() -> [bool; 308] {
-            let mut array = [true; 308];
-            (0..100).for_each(|i| {
+        fn create_array() -> [bool; ENTITY_COUNT] {
+            let mut array = [true; ENTITY_COUNT];
+            (0..Entity::Is as usize).for_each(|i| {
                 array[i] = false;
             });
             array

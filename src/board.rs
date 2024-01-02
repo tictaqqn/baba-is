@@ -1,18 +1,18 @@
 use std::collections::HashMap;
 
 use crate::{
-    global::{is_object, is_subject, is_verb, Direction, IsState, DEFEAT, PUSH, STOP, WIN, YOU},
+    global::{is_object, is_subject, is_verb, Direction, Entity, IsState},
     renderer::Renderer,
 };
 
 pub struct Board<R: Renderer> {
-    pub map: HashMap<[i32; 2], Vec<usize>>,
+    pub map: HashMap<[i32; 2], Vec<Entity>>,
     is_state: IsState,
     pub renderer: R,
 }
 
 impl<R: Renderer> Board<R> {
-    pub fn new(map: HashMap<[i32; 2], Vec<usize>>, renderer: R) -> Self {
+    pub fn new(map: HashMap<[i32; 2], Vec<Entity>>, renderer: R) -> Self {
         Self {
             map,
             is_state: IsState::default(),
@@ -20,28 +20,28 @@ impl<R: Renderer> Board<R> {
         }
     }
 
-    fn move_entity(&mut self, ij: [i32; 2], entity: usize, direction: Direction) -> bool {
+    fn move_entity(&mut self, ij: [i32; 2], entity: Entity, direction: Direction) -> bool {
         let [i, j] = ij;
         let next_move = direction.next([i, j]);
         let next_move_entities = self.map.get(&next_move).cloned();
         if let Some(next_move_entities) = next_move_entities {
             for y in next_move_entities {
-                if self.is_state.is_win[y] && self.is_state.is_you[entity] {
+                if self.is_state.is_win[y as usize] && self.is_state.is_you[entity as usize] {
                     self.renderer.render_win(self);
                     std::process::exit(0);
                 }
-                if self.is_state.is_defeat[y] && self.is_state.is_you[entity] {
+                if self.is_state.is_defeat[y as usize] && self.is_state.is_you[entity as usize] {
                     self.renderer.render_defeat(self);
                     std::process::exit(0);
                 }
-                if self.is_state.is_defeat[y] && !self.is_state.is_you[entity] {
+                if self.is_state.is_defeat[y as usize] && !self.is_state.is_you[entity as usize] {
                     self.map.get_mut(&next_move).unwrap().retain(|&x| x != y);
                     return true;
                 }
-                if self.is_state.is_stop[y] {
+                if self.is_state.is_stop[y as usize] {
                     return false;
                 }
-                if self.is_state.is_push[y] {
+                if self.is_state.is_push[y as usize] {
                     let success = self.move_entity(next_move, entity, direction);
                     if !success {
                         return false;
@@ -76,18 +76,18 @@ impl<R: Renderer> Board<R> {
                                 if !is_object(z) {
                                     continue;
                                 }
-                                if z == YOU {
-                                    is_state.is_you[x] = true;
-                                } else if z == PUSH {
-                                    is_state.is_push[x] = true;
-                                } else if z == STOP {
-                                    is_state.is_stop[x] = true;
-                                } else if z == WIN {
-                                    is_state.is_win[x] = true;
-                                } else if z == DEFEAT {
-                                    is_state.is_defeat[x] = true;
+                                if z == Entity::You {
+                                    is_state.is_you[x as usize] = true;
+                                } else if z == Entity::Push {
+                                    is_state.is_push[x as usize] = true;
+                                } else if z == Entity::Stop {
+                                    is_state.is_stop[x as usize] = true;
+                                } else if z == Entity::Win {
+                                    is_state.is_win[x as usize] = true;
+                                } else if z == Entity::Defeat {
+                                    is_state.is_defeat[x as usize] = true;
                                 } else {
-                                    unreachable!("Unknown object: {}", z);
+                                    unreachable!("Unknown object: {:?}", z);
                                 }
                             }
                         }
@@ -101,7 +101,7 @@ impl<R: Renderer> Board<R> {
         // clones here because entities of map changes while iteration
         for (ij, xs) in self.map.clone().into_iter() {
             for x in xs {
-                if self.is_state.is_you[x] {
+                if self.is_state.is_you[x as usize] {
                     self.move_entity(ij, x, input);
                 }
             }
