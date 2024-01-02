@@ -28,19 +28,21 @@ pub enum Entity {
 
 const ENTITY_COUNT: usize = 30;
 
-#[inline]
-pub fn is_subject(entity: Entity) -> bool {
-    entity as usize >= Entity::BabaB as usize
-}
+impl Entity {
+    #[inline]
+    pub fn is_subject(self) -> bool {
+        self as usize >= Self::BabaB as usize
+    }
 
-#[inline]
-pub fn is_verb(entity: Entity) -> bool {
-    (Entity::Is as usize..Entity::You as usize).contains(&(entity as usize))
-}
+    #[inline]
+    pub fn is_verb(self) -> bool {
+        (Self::Is as usize..Self::You as usize).contains(&(self as usize))
+    }
 
-#[inline]
-pub fn is_object(entity: Entity) -> bool {
-    (Entity::You as usize..Entity::BabaB as usize).contains(&(entity as usize))
+    #[inline]
+    pub fn is_object(self) -> bool {
+        (Self::You as usize..Self::BabaB as usize).contains(&(self as usize))
+    }
 }
 
 pub struct IsState {

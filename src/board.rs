@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use crate::{
-    global::{is_object, is_subject, is_verb, Direction, Entity, IsState},
+    global::{Direction, Entity, IsState},
     renderer::Renderer,
 };
 
@@ -58,7 +58,7 @@ impl<R: Renderer> Board<R> {
         let entities = self.map.get(&ij);
         if let Some(entities) = entities {
             for &x in entities {
-                if !is_subject(x) {
+                if !x.is_subject() {
                     continue;
                 }
                 let [i, j] = ij;
@@ -69,11 +69,11 @@ impl<R: Renderer> Board<R> {
                     let next_next_move_entities = self.map.get(&next_next_move);
                     if let Some(next_next_move_entities) = next_next_move_entities {
                         for &y in next_move_entities {
-                            if !is_verb(y) {
+                            if !y.is_verb() {
                                 continue;
                             }
                             for &z in next_next_move_entities {
-                                if !is_object(z) {
+                                if !z.is_object() {
                                     continue;
                                 }
                                 if z == Entity::You {
