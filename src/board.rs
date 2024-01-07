@@ -21,8 +21,7 @@ impl<R: Renderer> Board<R> {
     }
 
     fn move_entity(&mut self, ij: [i32; 2], entity: Entity, direction: Direction) -> bool {
-        let [i, j] = ij;
-        let next_move = direction.next([i, j]);
+        let next_move = direction.next(ij);
         let next_move_entities = self.map.get(&next_move).cloned();
         if let Some(next_move_entities) = next_move_entities {
             for y in next_move_entities {
@@ -61,8 +60,7 @@ impl<R: Renderer> Board<R> {
                 if !x.is_subject() {
                     continue;
                 }
-                let [i, j] = ij;
-                let next_move = direction.next([i, j]);
+                let next_move = direction.next(ij);
                 let next_move_entities = self.map.get(&next_move);
                 if let Some(next_move_entities) = next_move_entities {
                     let next_next_move = direction.next(next_move);

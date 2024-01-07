@@ -81,13 +81,13 @@ pub enum Direction {
 }
 
 impl Direction {
-    pub fn next(self, xy: [i32; 2]) -> [i32; 2] {
-        let [x, y] = xy;
+    pub fn next(self, ij: [i32; 2]) -> [i32; 2] {
+        let [i, j] = ij;
         match self {
-            Direction::Up => [x - 1, y],
-            Direction::Down => [x + 1, y],
-            Direction::Left => [x, y - 1],
-            Direction::Right => [x, y + 1],
+            Direction::Up => [i - 1, j],
+            Direction::Down => [i + 1, j],
+            Direction::Left => [i, j - 1],
+            Direction::Right => [i, j + 1],
         }
     }
 }
