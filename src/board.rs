@@ -48,7 +48,11 @@ impl<R: Renderer> Board<R> {
                 }
             }
         }
-        self.map.get_mut(&ij).unwrap().retain(|&x| x != entity);
+        let x = self.map.get_mut(&ij).unwrap();
+        x.retain(|&x| x != entity);
+        if x.is_empty() {
+            self.map.remove(&ij);
+        }
         self.map.entry(next_move).or_default().push(entity);
         true
     }
