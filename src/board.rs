@@ -20,6 +20,14 @@ impl<R: Renderer> Board<R> {
         }
     }
 
+    fn remove(&mut self, ij: [i32; 2], entity: Entity) {
+        let x = self.map.get_mut(&ij).unwrap();
+        x.retain(|&x| x != entity);
+        if x.is_empty() {
+            self.map.remove(&ij);
+        }
+    }
+
     fn move_entity(&mut self, ij: [i32; 2], entity: Entity, direction: Direction) -> bool {
         let next_move = direction.next(ij);
         let next_move_entities = self.map.get(&next_move).cloned();
@@ -34,7 +42,7 @@ impl<R: Renderer> Board<R> {
                     std::process::exit(0);
                 }
                 if self.is_state.is_defeat[y as usize] && !self.is_state.is_you[entity as usize] {
-                    self.map.get_mut(&next_move).unwrap().retain(|&x| x != y);
+                    self.remove(next_move, entity);
                     return true;
                 }
                 if self.is_state.is_stop[y as usize] {
@@ -48,11 +56,7 @@ impl<R: Renderer> Board<R> {
                 }
             }
         }
-        let x = self.map.get_mut(&ij).unwrap();
-        x.retain(|&x| x != entity);
-        if x.is_empty() {
-            self.map.remove(&ij);
-        }
+        self.remove(ij, entity);
         self.map.entry(next_move).or_default().push(entity);
         true
     }
