@@ -26,7 +26,7 @@ pub enum Entity {
     SkullB,
 }
 
-const ENTITY_COUNT: usize = 30;
+pub const ENTITY_COUNT: usize = 30;
 
 impl Entity {
     #[inline]
@@ -45,6 +45,7 @@ impl Entity {
     }
 }
 
+#[derive(PartialEq, Debug)] // Added PartialEq and Debug
 pub struct IsState {
     pub is_you: [bool; ENTITY_COUNT],
     pub is_push: [bool; ENTITY_COUNT],
@@ -55,19 +56,14 @@ pub struct IsState {
 
 impl Default for IsState {
     fn default() -> Self {
-        fn create_array() -> [bool; ENTITY_COUNT] {
-            let mut array = [true; ENTITY_COUNT];
-            (0..Entity::Is as usize).for_each(|i| {
-                array[i] = false;
-            });
-            array
-        }
+        // All properties should be false by default.
+        // Rules discovered by parse_box will turn the relevant ones on.
         Self {
-            is_you: create_array(),
-            is_push: create_array(),
-            is_stop: create_array(),
-            is_win: create_array(),
-            is_defeat: create_array(),
+            is_you: [false; ENTITY_COUNT],
+            is_push: [false; ENTITY_COUNT],
+            is_stop: [false; ENTITY_COUNT],
+            is_win: [false; ENTITY_COUNT],
+            is_defeat: [false; ENTITY_COUNT],
         }
     }
 }

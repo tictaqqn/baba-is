@@ -14,7 +14,8 @@ impl Interactor<CuiRenderer> {
     }
 
     pub fn run(&mut self) {
-        self.board.renderer.render(&self.board);
+        // Pass &mut std::io::stdout() for the initial render
+        self.board.renderer.render(&self.board, &mut std::io::stdout());
         loop {
             let mut input = String::new();
             std::io::stdin().read_line(&mut input).unwrap();
